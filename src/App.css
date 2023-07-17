@@ -12,5 +12,6 @@
 .card {
   width: 100px;
   height: 200px;
-  background-color: red;
+  border: 2px solid black;
+  /* background-color: red; */
 }
