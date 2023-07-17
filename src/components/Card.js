@@ -11,7 +11,7 @@ export default function Card({number, handleClick, id, isClicked, handleGameOver
         }
     }
     return (
-        <div className="card" onClick={cardHandleClick} id={id}>
+        <div style={{width: '70px'}} className="card" onClick={cardHandleClick} id={id}>
             {number}
         </div>
     )
