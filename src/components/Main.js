@@ -25,6 +25,7 @@ export default function Main() {
     bestScore: 0
   })
 
+  // createScore()
   useEffect(() => {
      let currentScore = cardArray.reduce((prev, cur) => {
         if(cur.clicked){
