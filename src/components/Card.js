@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 
-export default function Card({number, handleClick, id, isClicked, handleGameOver}) {
+export default function Card({meme, handleClick, handleGameOver}) {
     // console.log(id)
+    const { id, name, url, isClicked } = meme
     function cardHandleClick(e) {
+        console.log('clicked', isClicked)
         if(isClicked) {
             handleGameOver()
             return
@@ -11,14 +13,15 @@ export default function Card({number, handleClick, id, isClicked, handleGameOver
         }
     }
     return (
-        <div style={{width: '70px'}} className="card" onClick={cardHandleClick} id={id}>
-            {number}
-        </div>
-        // <ImageStyled scr={} />
+        // <div style={{width: '70px'}} className="card" onClick={cardHandleClick} id={id}>
+        //     {number}
+        // </div>
+        <ImageStyled src={url} onClick={cardHandleClick} id={id}/>
 
     )
 }    
 
 const ImageStyled = styled.img`
-    width: 70px;
+    width: 100px;
+    
 `

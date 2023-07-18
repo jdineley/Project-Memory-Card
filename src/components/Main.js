@@ -6,41 +6,72 @@ import Header from './Header';
 
 export default function Main() {
   const numberOfCards = 10;
-  function createInitialCardArray() {
-    let initialArray = [];
-    for(let i = 0; i < numberOfCards; i++) {
-      initialArray.push({
-        number: i,
-        clicked: false
-      })
-    }
-    return initialArray;
-  }
-  const [cardArray, setCardArray] = React.useState(() => {
-    return createInitialCardArray()
-  })
+  // function createInitialCardArray() {
+  //   let initialArray = [];
+  //   for(let i = 0; i < numberOfCards; i++) {
+  //     initialArray.push({
+  //       number: i,
+  //       clicked: false
+  //     })
+  //   }
+  //   return initialArray;
+  // }
+  // const [cardArray, setCardArray] = React.useState(() => {
+  //   return createInitialCardArray()
+  // })
   const [isPlay, setIsPlay] = useState(true)
-  const [meme, setMeme] = React.useState({
-    topText: "",
-    bottomText: "",
-    randomImage: "http://i.imgflip.com/1bij.jpg" 
-  })
-  const [allMemes, setAllMemes] = useState()
+  const [memes, setMemes] = React.useState([])
+
+
+  function makeCardArrayElements(memes) {
+    console.log('make array', memes)
+   return memes.map(meme => {
+      return <Card key={meme.id} meme={meme} isClicked={meme.clicked} handleClick={handleClick} handleGameOver={handleGameOver}/>
+    })
+  }
+
+  
+
+  const cardArrayElements = useRef(null)
 
   useEffect(() => {
     fetch('https://api.imgflip.com/get_memes')
       .then(res => res.json())
-      .then(data => setAllMemes(data))
+      .then(memeData => {
+        const memesData = memeData.data.memes.slice(0,numberOfCards)
+        const memes = []
+        memesData.forEach(meme => {
+          memes.push({
+            id: meme.id,
+            name: meme.name,
+            url: meme.url,
+            isClicked: false
+          })
+        })
+        console.log('api', memes)
+        setMemes(memes)
+        
+      })
   },[])
 
-  console.log(allMemes)
+  useEffect(() => {
+    console.log('memes changed')
+    cardArrayElements.current = makeCardArrayElements(memes)
+    currentScore.current = memes.reduce((prev, cur) => {
+      if(cur.clicked){
+      return prev+1
+    } return prev
+  }, 0)
+  },[memes])
 
-  function getMemeImage() {
-    const memeArray = allMemes.data.allMemes
-    const randomIndex = Math.floor(Math.random()*memeArray.length)
-    const randomImage = memeArray[randomIndex]
+  console.log(memes)
 
-  }
+  // function getMemeImage() {
+  //   const memeArray = allMemes.data.allMemes
+  //   const randomIndex = Math.floor(Math.random()*memeArray.length)
+  //   const randomImage = memeArray[randomIndex]
+
+  // }
 
   let score = useRef( 
     {
@@ -49,21 +80,17 @@ export default function Main() {
     }
   )
 
-  let currentScore = cardArray.reduce((prev, cur) => {
-      if(cur.clicked){
-      return prev+1
-    } return prev
-  }, 0)
+  const currentScore = useRef(0)
     
   score.current = 
       {
         ...score.current,
-        currentScore: currentScore,
+        currentScore: currentScore.current,
       }
 
-  let cardArrayElements = cardArray.map(cardItem => {
-    return <Card key={cardItem.number} id={cardItem.number} number={cardItem.number} isClicked={cardItem.clicked} handleClick={handleClick} handleGameOver={handleGameOver}/>
-  })
+  // let cardArrayElements = memes.map(meme => {
+  //   return <Card meme={meme} isClicked={meme.clicked} handleClick={handleClick} handleGameOver={handleGameOver}/>
+  // })
 
   function handleGameOver() {
     setIsPlay(false)
@@ -71,12 +98,12 @@ export default function Main() {
 
 
   function handleClick(id) {
-    setCardArray(prevArray => {
+    setMemes(prevArray => {
       return prevArray.map(item => {
-        if(item.number === id){
+        if(item.id === id){
           return {
             ...item,
-            clicked: true
+            isClicked: true
           }
         }
         return item
@@ -93,7 +120,9 @@ export default function Main() {
       }
       
     setIsPlay(true);
-    setCardArray(createInitialCardArray())
+    setMemes(prevMemes => {
+      return  [...prevMemes]
+    })
   }
 
   return (
@@ -101,7 +130,7 @@ export default function Main() {
       <Header score={score.current}/>
       <MainWrapper>
           {
-            isPlay ? cardArrayElements : <GameOver resetGameHandler={resetGameHandler}/>
+            isPlay ? cardArrayElements.current : <GameOver resetGameHandler={resetGameHandler}/>
           }
       </MainWrapper>
     </>
