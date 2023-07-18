@@ -20,49 +20,34 @@ export default function Main() {
     return createInitialCardArray()
   })
   const [isPlay, setIsPlay] = useState(true)
-  const score = {
+  let score = useRef( {
     currentScore: 0,
     bestScore: 0
   }
+  )
 
-  // createScore()
-  
-     let currentScore = cardArray.reduce((prev, cur) => {
-        if(cur.clicked){
-        return prev+1
-      } return prev
-    }, 0)
-    console.log(currentScore)
-    // let bestScore = currentScore > score.bestScore ? currentScore : score.bestScore
-    score = 
-        {
-          
-          ...prevScore,
-          currentScore: currentScore,
-          // bestScore: bestScore
-
-        }
-      
-      
-
-    })
-  
-
-  console.log(cardArray)
+  let currentScore = cardArray.reduce((prev, cur) => {
+      if(cur.clicked){
+      return prev+1
+    } return prev
+  }, 0)
+    
+  score.current = 
+      {
+        ...score.current,
+        currentScore: currentScore,
+      }
 
   let cardArrayElements = cardArray.map(cardItem => {
     return <Card key={cardItem.number} id={cardItem.number} number={cardItem.number} isClicked={cardItem.clicked} handleClick={handleClick} handleGameOver={handleGameOver}/>
   })
 
   function handleGameOver() {
-    console.log('make game over')
     setIsPlay(false)
   }
 
 
   function handleClick(id) {
-    console.log(id)
-    
     setCardArray(prevArray => {
       return prevArray.map(item => {
         if(item.number === id){
@@ -74,33 +59,23 @@ export default function Main() {
         return item
       }).sort((a,b) => 0.5 - Math.random())
     })
-    // createScore()
   }
 
   function resetGameHandler() {
-    setScore(prevScore => {
-      let bestScore = prevScore.currentScore > prevScore.bestScore ? prevScore.currentScore : prevScore.bestScore
-      return (
-        {
-          ...prevScore,
-          bestScore: bestScore
-        }
-      )
-    })
+    let bestScore = score.current.currentScore > score.current.bestScore ? score.current.currentScore : score.current.bestScore
+    score.current = 
+      {
+        ...score.current,
+        bestScore: bestScore
+      }
+      
     setIsPlay(true);
     setCardArray(createInitialCardArray())
   }
 
   return (
-    // <div className="App">
-    //   {/* <h1>React App</h1> */}
-    //   <div className='card-container'>
-    //     {isPlay ? cardArrayElements : <h1>Game Over</h1>}
-    //     {!isPlay && <button onClick={resetGame}>Start game</button>}
-    //   </div>
-    // </div>
     <>
-      <Header score={score}/>
+      <Header score={score.current}/>
       <MainWrapper>
           {
             isPlay ? cardArrayElements : <GameOver resetGameHandler={resetGameHandler}/>
