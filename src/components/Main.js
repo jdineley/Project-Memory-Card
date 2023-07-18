@@ -20,13 +20,13 @@ export default function Main() {
     return createInitialCardArray()
   })
   const [isPlay, setIsPlay] = useState(true)
-  const [score, setScore] = useState({
+  const score = {
     currentScore: 0,
     bestScore: 0
-  })
+  }
 
   // createScore()
-  useEffect(() => {
+  
      let currentScore = cardArray.reduce((prev, cur) => {
         if(cur.clicked){
         return prev+1
@@ -34,8 +34,7 @@ export default function Main() {
     }, 0)
     console.log(currentScore)
     // let bestScore = currentScore > score.bestScore ? currentScore : score.bestScore
-    setScore(prevScore => {
-      return (
+    score = 
         {
           
           ...prevScore,
@@ -43,11 +42,11 @@ export default function Main() {
           // bestScore: bestScore
 
         }
-      )
+      
       
 
     })
-  },[cardArray])
+  
 
   console.log(cardArray)
 
