@@ -20,10 +20,33 @@ export default function Main() {
     return createInitialCardArray()
   })
   const [isPlay, setIsPlay] = useState(true)
-  let score = useRef( {
+  const [meme, setMeme] = React.useState({
+    topText: "",
+    bottomText: "",
+    randomImage: "http://i.imgflip.com/1bij.jpg" 
+  })
+  const [allMemes, setAllMemes] = useState()
+
+  useEffect(() => {
+    fetch('https://api.imgflip.com/get_memes')
+      .then(res => res.json())
+      .then(data => setAllMemes(data))
+  },[])
+
+  console.log(allMemes)
+
+  function getMemeImage() {
+    const memeArray = allMemes.data.allMemes
+    const randomIndex = Math.floor(Math.random()*memeArray.length)
+    const randomImage = memeArray[randomIndex]
+
+  }
+
+  let score = useRef( 
+    {
     currentScore: 0,
     bestScore: 0
-  }
+    }
   )
 
   let currentScore = cardArray.reduce((prev, cur) => {
