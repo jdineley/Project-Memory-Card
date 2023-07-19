@@ -7,7 +7,7 @@ export default function Header({ score }) {
     
     return (
         <HeaderWrapper>
-            <h1>Memory Card Game</h1>
+            <h1>Meme Memory Card Game</h1>
             <ScoreWrapper>
                 <p>Score: {score.currentScore}</p>
                 <p>Best score: {score.bestScore}</p>
@@ -19,9 +19,15 @@ export default function Header({ score }) {
 
 
 const HeaderWrapper = styled.div`
+    width: 100%;
+    z-index: 1;
     display: flex;
-    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    justify-content: space-around;
     align-items: center;
+    background-color: ${({ theme }) => theme.colors.green};
+    padding: 30px;
 `
 const ScoreWrapper = styled.div`
     display: flex;

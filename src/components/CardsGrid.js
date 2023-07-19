@@ -16,6 +16,6 @@ export default function CardsGrid( { memes, handleClick }) {
 
 const CardGridsWrapper = styled.div`
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
     gap: 3rem;
 `

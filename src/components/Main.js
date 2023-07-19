@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import Card from './Card';
 import GameOver from './GameOver';
 import Header from './Header';
 import CardGrids from './CardsGrid'
 
 export default function Main() {
-  const numberOfCards = 16;
+  const numberOfCards = 18;
 
   // State
   const [isPlay, setIsPlay] = useState(true)
@@ -22,7 +21,6 @@ export default function Main() {
   )
 
   // Reassigned variables
-  let cardArrayElements
   let currentScore
   
   // Api call
@@ -102,7 +100,8 @@ export default function Main() {
   return (
     <>
       <Header score={score.current}/>
-      <MainWrapper>
+      <MainWrapper >
+      <p style={{'margin-bottom': '20px'}}>Earn points clicking on each card once only!</p>
           {
             isPlay ? <CardGrids memes={memes} handleClick={handleClick}/> : <GameOver resetGameHandler={resetGameHandler}/>
           }
@@ -113,27 +112,7 @@ export default function Main() {
 
 
 const MainWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  padding: 4rem;
+  margin-top: 100px;
+  margin-bottom: 40px;
 `
-// display: grid;
-// justify-content: space-around;
-// justify-items: center;
-// align-items: center;
-// gap: 30px;
-
-// @media (min-width: 400px){
-//   grid-template-columns: repeat(2, auto);
-// }
-// @media (min-width: 900px){
-//   grid-template-columns: repeat(4, auto);
-// }
-
-// @media (min-width: 1600px){
-//   grid-template-columns: repeat(8, auto);
-// }
-
-// display: flex;
-// gap: 5px;
-// flex-wrap: wrap;
