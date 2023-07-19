@@ -1,7 +1,7 @@
 {
   "name": "project-memory-card",
   "version": "0.1.0",
-  "homepage": "https://jdineley.github.io/react-gh-pages",
+  "homepage": "https://jdineley.github.io/Project-Memory-Card/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
