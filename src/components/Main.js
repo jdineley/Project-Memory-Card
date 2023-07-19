@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import GameOver from './GameOver';
 import Header from './Header';
 import CardGrids from './CardsGrid'
+import Footer from './Footer'
 
 export default function Main() {
   const numberOfCards = 18;
@@ -99,13 +100,14 @@ export default function Main() {
 
   return (
     <>
-      <Header score={score.current}/>
+      {isPlay && <Header score={score.current}/>}
       <MainWrapper >
-      <p style={{'margin-bottom': '20px'}}>Earn points clicking on each card once only!</p>
+          {isPlay && <p style={{'margin-bottom': '20px'}}>Earn points clicking on each card once only!</p>}
           {
             isPlay ? <CardGrids memes={memes} handleClick={handleClick}/> : <GameOver resetGameHandler={resetGameHandler}/>
           }
       </MainWrapper>
+      {isPlay && <Footer />}
     </>
   );
 }
