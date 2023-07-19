@@ -13,15 +13,11 @@ export default function Card({meme, handleClick, handleGameOver}) {
         }
     }
     return (
-        // <div style={{width: '70px'}} className="card" onClick={cardHandleClick} id={id}>
-        //     {number}
-        // </div>
         <ImageStyled src={url} onClick={cardHandleClick} id={id}/>
 
     )
 }    
 
 const ImageStyled = styled.img`
-    width: 100px;
-    
+    width: 200px;    
 `

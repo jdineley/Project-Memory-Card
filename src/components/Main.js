@@ -4,36 +4,28 @@ import Card from './Card';
 import GameOver from './GameOver';
 import Header from './Header';
 
+
 export default function Main() {
-  const numberOfCards = 10;
-  // function createInitialCardArray() {
-  //   let initialArray = [];
-  //   for(let i = 0; i < numberOfCards; i++) {
-  //     initialArray.push({
-  //       number: i,
-  //       clicked: false
-  //     })
-  //   }
-  //   return initialArray;
-  // }
-  // const [cardArray, setCardArray] = React.useState(() => {
-  //   return createInitialCardArray()
-  // })
+  const numberOfCards = 16;
+
+  // State
   const [isPlay, setIsPlay] = useState(true)
   const [memes, setMemes] = React.useState([])
-
-
-  function makeCardArrayElements(memes) {
-    console.log('make array', memes)
-   return memes.map(meme => {
-      return <Card key={meme.id} meme={meme} isClicked={meme.clicked} handleClick={handleClick} handleGameOver={handleGameOver}/>
-    })
-  }
-
   
+  // Refs
+  const initialMemesCache = useRef(null) 
+  let score = useRef( 
+    {
+    currentScore: 0,
+    bestScore: 0
+    }
+  )
 
-  const cardArrayElements = useRef(null)
-
+  // Reassigned variables
+  let cardArrayElements
+  let currentScore
+  
+  // Api call
   useEffect(() => {
     fetch('https://api.imgflip.com/get_memes')
       .then(res => res.json())
@@ -48,56 +40,40 @@ export default function Main() {
             isClicked: false
           })
         })
-        console.log('api', memes)
+        initialMemesCache.current = memes
         setMemes(memes)
         
       })
   },[])
 
-  useEffect(() => {
-    console.log('memes changed')
-    cardArrayElements.current = makeCardArrayElements(memes)
-    currentScore.current = memes.reduce((prev, cur) => {
-      if(cur.clicked){
+  // Don't break if api call hasn't populated state yet
+  if(memes.length > 0) {
+    cardArrayElements = memes.map(meme => {
+      return <Card key={meme.id} meme={meme} isClicked={meme.clicked} handleClick={handleClick} handleGameOver={handleGameOver}/>
+    })
+    currentScore = memes.reduce((prev, cur) => {
+      if(cur.isClicked){
       return prev+1
     } return prev
   }, 0)
-  },[memes])
 
-  console.log(memes)
-
-  // function getMemeImage() {
-  //   const memeArray = allMemes.data.allMemes
-  //   const randomIndex = Math.floor(Math.random()*memeArray.length)
-  //   const randomImage = memeArray[randomIndex]
-
-  // }
-
-  let score = useRef( 
-    {
-    currentScore: 0,
-    bestScore: 0
-    }
-  )
-
-  const currentScore = useRef(0)
+  }
     
   score.current = 
       {
         ...score.current,
-        currentScore: currentScore.current,
+        currentScore: currentScore,
       }
 
-  // let cardArrayElements = memes.map(meme => {
-  //   return <Card meme={meme} isClicked={meme.clicked} handleClick={handleClick} handleGameOver={handleGameOver}/>
-  // })
 
+
+  // Handlers
   function handleGameOver() {
     setIsPlay(false)
   }
 
-
   function handleClick(id) {
+
     setMemes(prevArray => {
       return prevArray.map(item => {
         if(item.id === id){
@@ -120,9 +96,7 @@ export default function Main() {
       }
       
     setIsPlay(true);
-    setMemes(prevMemes => {
-      return  [...prevMemes]
-    })
+    setMemes(initialMemesCache.current)
   }
 
   return (
@@ -130,7 +104,7 @@ export default function Main() {
       <Header score={score.current}/>
       <MainWrapper>
           {
-            isPlay ? cardArrayElements.current : <GameOver resetGameHandler={resetGameHandler}/>
+            isPlay ? cardArrayElements : <GameOver resetGameHandler={resetGameHandler}/>
           }
       </MainWrapper>
     </>
@@ -139,7 +113,24 @@ export default function Main() {
 
 
 const MainWrapper = styled.div`
-  display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
+  display: grid;
+  justify-content: space-around;
+  justify-items: center;
+  align-items: center;
+  gap: 30px;
+  
+  @media (min-width: 400px){
+    grid-template-columns: repeat(2, auto);
+  }
+  @media (min-width: 900px){
+    grid-template-columns: repeat(4, auto);
+  }
+
+  @media (min-width: 1600px){
+    grid-template-columns: repeat(8, auto);
+  }
 `
+
+// display: flex;
+// gap: 5px;
+// flex-wrap: wrap;
