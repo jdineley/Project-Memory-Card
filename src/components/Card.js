@@ -1,23 +1,34 @@
 import styled from 'styled-components'
 
-export default function Card({meme, handleClick, handleGameOver}) {
-    // console.log(id)
+export default function Card({meme, handleClick}) {
+    
     const { id, name, url, isClicked } = meme
-    function cardHandleClick(e) {
-        console.log('clicked', isClicked)
-        if(isClicked) {
-            handleGameOver()
-            return
-        } else {
-            handleClick(id)
-        }
-    }
+    
     return (
-        <ImageStyled src={url} onClick={cardHandleClick} id={id}/>
+        <CardWrapper onClick={() => handleClick(id, isClicked)}>
+            <ImageStyled src={url}/>
+            <Text>{name}</Text>
+        </CardWrapper>
 
     )
-}    
+}   
+
+
+const CardWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+`
 
 const ImageStyled = styled.img`
-    width: 200px;    
+    padding: 0.5rem;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;   
+`
+
+const Text = styled.p`
+  padding: 0.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
 `

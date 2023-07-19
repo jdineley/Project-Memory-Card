@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Card from './Card';
 import GameOver from './GameOver';
 import Header from './Header';
-
+import CardGrids from './CardsGrid'
 
 export default function Main() {
   const numberOfCards = 16;
@@ -48,9 +48,6 @@ export default function Main() {
 
   // Don't break if api call hasn't populated state yet
   if(memes.length > 0) {
-    cardArrayElements = memes.map(meme => {
-      return <Card key={meme.id} meme={meme} isClicked={meme.clicked} handleClick={handleClick} handleGameOver={handleGameOver}/>
-    })
     currentScore = memes.reduce((prev, cur) => {
       if(cur.isClicked){
       return prev+1
@@ -72,8 +69,11 @@ export default function Main() {
     setIsPlay(false)
   }
 
-  function handleClick(id) {
-
+  function handleClick(id, isClicked) {
+    if(isClicked) {
+      handleGameOver();
+      return
+    }
     setMemes(prevArray => {
       return prevArray.map(item => {
         if(item.id === id){
@@ -104,7 +104,7 @@ export default function Main() {
       <Header score={score.current}/>
       <MainWrapper>
           {
-            isPlay ? cardArrayElements : <GameOver resetGameHandler={resetGameHandler}/>
+            isPlay ? <CardGrids memes={memes} handleClick={handleClick}/> : <GameOver resetGameHandler={resetGameHandler}/>
           }
       </MainWrapper>
     </>
@@ -113,23 +113,26 @@ export default function Main() {
 
 
 const MainWrapper = styled.div`
-  display: grid;
-  justify-content: space-around;
-  justify-items: center;
+  display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 30px;
-  
-  @media (min-width: 400px){
-    grid-template-columns: repeat(2, auto);
-  }
-  @media (min-width: 900px){
-    grid-template-columns: repeat(4, auto);
-  }
-
-  @media (min-width: 1600px){
-    grid-template-columns: repeat(8, auto);
-  }
 `
+// display: grid;
+// justify-content: space-around;
+// justify-items: center;
+// align-items: center;
+// gap: 30px;
+
+// @media (min-width: 400px){
+//   grid-template-columns: repeat(2, auto);
+// }
+// @media (min-width: 900px){
+//   grid-template-columns: repeat(4, auto);
+// }
+
+// @media (min-width: 1600px){
+//   grid-template-columns: repeat(8, auto);
+// }
 
 // display: flex;
 // gap: 5px;
