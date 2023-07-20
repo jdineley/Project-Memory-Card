@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Score from './Score'
 
 
 export default function Header({ score }) {
